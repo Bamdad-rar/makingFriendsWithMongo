@@ -3,8 +3,13 @@
 {% block styles %}
 <style>
     label {
-        display: block;
         font: 1rem 'Fira Sans', sans-serif;
+    }
+    .center {
+    margin: auto;
+    width: 60%;
+    padding: 10px;
+    text-align: center;
     }
 
     input,
@@ -68,43 +73,51 @@
 
 {% block content %}
 
-<form action="" method="post" >
-    {% csrf_token %}
+<div class="bg-form">
+    <h1 style="text-align: center">گزارش ثبت نام کاربران</h1>
 
-    <p>گزارش ثبت نام کاربران</p>
+    <div class="center"><label for="name">نام کاربری  :</label><input type="text" name="name" id="name"/></div>
+    
+    <div class="center" style="display: block;">
+        <label for="start_date">تاریخ شروع:</label>
+        <input type="date" id="start_date" name="start_date" min="2000-01-01" max="2022-12-31" required>
+        <input type="time" id="start_time" name="start_time">
+        <label for="start_time">: ساعت</label>
+    </div>
 
-    <label for="name">نام کاربری:</label>
-    <input type="text" name="name" id="name"/>
+    <div class="center" style="display: block;">
+        <label for="end_date">تاریخ پایان:</label>
+        <input type="date" id="end_date" name="end_date" min="2000-01-01" max="2022-12-31" required>
+        <input type="time" id="end_time" name="end_time">
+        <label for="end_time">: ساعت</label>
+    </div>
+    <!-- <input type="submit" value="ساخت گزارش" onsubmit=getReport() /> -->
+    <div class="center"><button onclick=getReport()>ساخت گزارش</button></div>
+</div>
+<div id="loader" style="display: none;"></div>
+<!-- <div class="loader cen" style="display: none;"> ...در حال اجرا</div> -->
+{% endblock content %}
 
-
-    <label for="start_date">تاریخ شروع:</label>
-    <input type="date" id="start_date" name="start_date" min="2000-01-01" max="2022-12-31" required>
-
-    <label for="start_time">ساعت:</label>
-    <input type="time" id="start_time" name="start_time">
-        
-
-    <label for="end_date">تاریخ پایان:</label>
-    <input type="date" id="end_date" name="end_date" min="2000-01-01" max="2022-12-31" required>
-
-    <label for="end_time">ساعت:</label>
-    <input type="time" id="end_time" name="end_time">
-    <input type="submit" value="ساخت گزارش" onsubmit=showLoader() />
-    <!-- <button onclick=showLoader()>ساخت گزارش</button> -->
-</form>
-
-
-    <div id="loader" style="display: none;"></div>
-
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
     function showLoader() {
       document.getElementById("loader").style.display = "block";
     }
     function getReport(){
-        fetch('http://localhost:8000/api/report')
-        .then(response => response.json())
-        .then(data => console.log(data));
-
+        showLoader()
+        const myForm = document.querySelector('.bg-form');
+        myForm.style.cssText += 'filter: blur(4px);-webkit-filter: blur(4px);';
+        axios({
+        method: 'post',
+        url: 'http://localhost:8000/api/report/',
+        data: {
+            firstName: 'Fred',
+            lastName: 'Flintstone'
+        }
+        });
+        // setTimeout(() => {  console.log("i waited!"); },3000);
     }
 </script>
-{% endblock content %}
+{% endblock javascript %}
+
