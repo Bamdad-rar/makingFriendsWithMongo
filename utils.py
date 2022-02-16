@@ -18,5 +18,3 @@ def get_collection_handle(db_handle,collection_name=COLL_NAME):
 def generate_csv_file_name():
     return "report_"+str(datetime.timestamp(datetime.utcnow()))+".csv"
 
-
-
