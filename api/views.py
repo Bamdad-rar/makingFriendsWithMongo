@@ -19,8 +19,8 @@ def report(request):
         shour,smin =[int(item) for item in request.data["start_time"].split(":")]
     if request.data["end_time"]:
         ehour,emin =[int(item) for item in request.data["start_time"].split(":")]
-    start_signup = datetime(year=sy,month=sm,day=sd,hour=shour,minute=smin).isoformat()
-    end_signup = datetime(year=ey,month=em,day=ed,hour=emin,minute=emin).isoformat()
+    start_signup = datetime(year=sy,month=sm,day=sd,hour=shour,minute=smin).isoformat(timespec="microseconds")
+    end_signup = datetime(year=ey,month=em,day=ed,hour=ehour,minute=emin).isoformat(timespec="microseconds")
 
     db_handle , _ = get_db_handle()
     coll_handle = get_collection_handle(db_handle)
