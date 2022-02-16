@@ -5,16 +5,22 @@ from utils import get_db_handle, get_collection_handle
 import csv
 from utils import generate_csv_file_name
 from myWeb.settings import BASE_DIR
-
-
+from datetime import datetime
 STORAGE_ABS_PATH = BASE_DIR / "report/storage/"
 
 
 @api_view(['POST'])
 def report(request):
     print(request.data)
-    start_signup = request.data["start_date"]+"T"+request.data["start_time"]
-    end_signup = request.data["end_date"]+"T"+request.data["end_time"]
+    sy,sm,sd =[int(item) for item in request.data["start_date"].split("-")]
+    ey,em,ed =[int(item) for item in request.data["end_date"].split("-")]
+    shour,ehour,smin,emin = 0,0,0,0
+    if request.data["start_time"]:
+        shour,smin =[int(item) for item in request.data["start_time"].split(":")]
+    if request.data["end_time"]:
+        ehour,emin =[int(item) for item in request.data["start_time"].split(":")]
+    start_signup = datetime(year=sy,month=sm,day=sd,hour=shour,minute=smin).isoformat()
+    end_signup = datetime(year=ey,month=em,day=ed,hour=emin,minute=emin).isoformat()
 
     db_handle , _ = get_db_handle()
     coll_handle = get_collection_handle(db_handle)
