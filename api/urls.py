@@ -1,8 +1,7 @@
-from django.urls import path,include
-from .views import file_download, report
+from django.urls import path
+from .views import report
 
 
 urlpatterns = [
     path('report/', report),
-    path('report/download/<str:name>', file_download),
 ]
