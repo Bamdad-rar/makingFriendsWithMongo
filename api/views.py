@@ -6,7 +6,6 @@ import csv
 from utils import generate_csv_file_name
 from myWeb.settings import BASE_DIR
 import mimetypes
-import os
 from django.http.response import HttpResponse
 
 
@@ -15,19 +14,22 @@ STORAGE_ABS_PATH = BASE_DIR / "report/storage/"
 
 @api_view(['POST'])
 def report(request):
-    print(request.data)
-    # validate request parameters
-    # fix query
+    start_signup = request.data["start_date"]+"T"+request.data["start_time"]
+    end_signup = request.data["end_date"]+"T"+request.data["end_time"]
 
-    START_DATE = "2010-01-01"
-    END_DATE = "2010-12-12"
-
-    db_handle , db_client = get_db_handle()
+    db_handle , _ = get_db_handle()
     coll_handle = get_collection_handle(db_handle)
+
+    if name:=request.data["name"]:
+        print("query with name")
+        targetQuery = coll_handle.find({"signup":{"$gte":start_signup,"$lt":end_signup},"name":name},{"_id":0}).sort("signup")
+    else:
+        targetQuery = coll_handle.find({"signup":{"$gte":start_signup,"$lt":end_signup}},{"_id":0}).sort("signup")
+
     file_name = generate_csv_file_name()
     with open(str(STORAGE_ABS_PATH)+"/"+file_name,'w') as f:
         writer = csv.writer(f)
-        for row in list(coll_handle.find({"signup":{"$gte":START_DATE,"$lt":END_DATE}},{"_id":0}).sort("signup")):
+        for row in list(targetQuery):
             writer.writerow(row.values())
     return Response({"file_url":"http://localhost:8000/api/report/download/"+file_name},status=status.HTTP_200_OK)
 
@@ -41,5 +43,3 @@ def file_download(request,name):
         response['Content-Disposition'] = "attachment; filename=%s" % filename
     return response
 
-
-    

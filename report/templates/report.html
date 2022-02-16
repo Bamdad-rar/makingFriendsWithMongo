@@ -98,7 +98,7 @@
         <!-- <div class="center"><button onclick=getReport()>ساخت گزارش</button></div> -->
     </form>
 </div>
-<div class="center" style="display: block;"> گزارش مورد نظر ایجاد شد برای دانلود<a id="file_url" href="">اینجا </a>  را کلیک کنید</div>
+<div id="file_url" class="center" style="display: none;"> گزارش مورد نظر ایجاد شد برای دانلود<a id="file_link" href="">اینجا </a>  را کلیک کنید</div>
 
 <div id="loader" style="display: none;"></div>
 <!-- <div class="loader cen" style="display: none;"> ...در حال اجرا</div> -->
@@ -119,6 +119,11 @@
         blurBackground(true);
         getReport(n,sd,ed,st,et);
     });
+    function showFileLink(file_path){
+        document.getElementById("file_url").style.display = "block";
+        var a = document.getElementById("file_link");
+        a.href = file_path;
+    }
 
     function showLoader(cond) {
         if (cond === true){document.getElementById("loader").style.display = "block";}
@@ -150,12 +155,11 @@
             console.log(response);
             console.log(response.data.file_url);
             if (response.status === 200){
-                // unblur
                 showLoader(false);
                 blurBackground(false);
-                $("#file_url").attr("href", response.data.file_url);
-                // clear loader
-                // create link
+                showFileLink(response.data.file_url);
+            }else{
+                alert("something horrible happened :(")
             }
 
         }).catch(function(error){
