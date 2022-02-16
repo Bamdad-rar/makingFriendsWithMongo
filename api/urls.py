@@ -3,5 +3,5 @@ from .views import report
 
 
 urlpatterns = [
-    path('report/', report),
+    path("report/", report),
 ]

@@ -1,12 +1,6 @@
 from pymongo import MongoClient
 from datetime import datetime
-
-DB_NAME = 'test'
-COLL_NAME = 'people'
-USER = 'bamdad'
-PWD = '1234'
-HOST = '127.0.0.1'
-PORT = 27017
+from config import *
 
 
 def get_db_handle(db_name=DB_NAME, host=HOST, port=PORT, username=USER, password=PWD):
@@ -23,4 +17,6 @@ def get_collection_handle(db_handle,collection_name=COLL_NAME):
 
 def generate_csv_file_name():
     return "report_"+str(datetime.timestamp(datetime.utcnow()))+".csv"
+
+
 
