@@ -1,122 +1,166 @@
 {% extends 'base.html' %}
 
-{% block styles %}
-<style>
-    label {
-        font: 1rem 'Fira Sans', sans-serif;
-    }
-    .center {
-    margin: auto;
-    width: 60%;
-    padding: 10px;
-    text-align: center;
-    }
+{% block head %}
+    <style>
+        label {
+            font: 1rem 'Fira Sans', sans-serif;
+        }
+        .center {
+        margin: auto;
+        width: 60%;
+        padding: 10px;
+        text-align: center;
+        }
 
-    input,
-    label {
-        margin: .4rem 0;
-    }
+        input,
+        label {
+            margin: .4rem 0;
+        }
 
-    /* Center the loader */
-    #loader {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    z-index: 1;
-    width: 120px;
-    height: 120px;
-    margin: -76px 0 0 -76px;
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid #3498db;
-    -webkit-animation: spin 2s linear infinite;
-    animation: spin 2s linear infinite;
-    }
+        /* Center the loader */
+        #loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 120px;
+        height: 120px;
+        margin: -76px 0 0 -76px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+        }
 
-    @-webkit-keyframes spin {
-    0% { -webkit-transform: rotate(0deg); }
-    100% { -webkit-transform: rotate(360deg); }
-    }
+        @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+        }
 
-    @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-    }
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
 
-    /* Add animation to "page content" */
-    .animate-bottom {
-    position: relative;
-    -webkit-animation-name: animatebottom;
-    -webkit-animation-duration: 1s;
-    animation-name: animatebottom;
-    animation-duration: 1s
-    }
+        /* Add animation to "page content" */
+        .animate-bottom {
+        position: relative;
+        -webkit-animation-name: animatebottom;
+        -webkit-animation-duration: 1s;
+        animation-name: animatebottom;
+        animation-duration: 1s
+        }
 
-    @-webkit-keyframes animatebottom {
-    from { bottom:-100px; opacity:0 } 
-    to { bottom:0px; opacity:1 }
-    }
+        @-webkit-keyframes animatebottom {
+        from { bottom:-100px; opacity:0 } 
+        to { bottom:0px; opacity:1 }
+        }
 
-    @keyframes animatebottom { 
-    from{ bottom:-100px; opacity:0 } 
-    to{ bottom:0; opacity:1 }
-    }
+        @keyframes animatebottom { 
+        from{ bottom:-100px; opacity:0 } 
+        to{ bottom:0; opacity:1 }
+        }
 
-    #myDiv {
-    display: none;
-    text-align: center;
-    }
-</style>
-
-{% endblock styles%}
+        #myDiv {
+        display: none;
+        text-align: center;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+{% endblock head%}
 
 
 {% block content %}
 
 <div class="bg-form">
-    <h1 style="text-align: center">گزارش ثبت نام کاربران</h1>
+    <form method="post" action="" id="post-form">
+        {% csrf_token %}
+        <h1 style="text-align: center">گزارش ثبت نام کاربران</h1>
 
-    <div class="center"><label for="name">نام کاربری  :</label><input type="text" name="name" id="name"/></div>
-    
-    <div class="center" style="display: block;">
-        <label for="start_date">تاریخ شروع:</label>
-        <input type="date" id="start_date" name="start_date" min="2000-01-01" max="2022-12-31" required>
-        <input type="time" id="start_time" name="start_time">
-        <label for="start_time">: ساعت</label>
-    </div>
+        <div class="center"><label for="name">نام کاربری  :</label><input type="text" name="name" id="name"/></div>
+        
+        <div class="center" style="display: block;">
+            <label for="start_date">تاریخ شروع:</label>
+            <input type="date" id="start_date" name="start_date" min="2000-01-01" max="2022-12-31" required>
+            <input type="time" id="start_time" name="start_time">
+            <label for="start_time">: ساعت</label>
+        </div>
 
-    <div class="center" style="display: block;">
-        <label for="end_date">تاریخ پایان:</label>
-        <input type="date" id="end_date" name="end_date" min="2000-01-01" max="2022-12-31" required>
-        <input type="time" id="end_time" name="end_time">
-        <label for="end_time">: ساعت</label>
-    </div>
-    <!-- <input type="submit" value="ساخت گزارش" onsubmit=getReport() /> -->
-    <div class="center"><button onclick=getReport()>ساخت گزارش</button></div>
+        <div class="center" style="display: block;">
+            <label for="end_date">تاریخ پایان:</label>
+            <input type="date" id="end_date" name="end_date" min="2000-01-01" max="2022-12-31" required>
+            <input type="time" id="end_time" name="end_time">
+            <label for="end_time">: ساعت</label>
+        </div>
+        <div class="center"><input type="submit" value="ساخت گزارش"/></div>
+        <!-- <div class="center"><button onclick=getReport()>ساخت گزارش</button></div> -->
+    </form>
 </div>
+<div class="center" style="display: block;"> گزارش مورد نظر ایجاد شد برای دانلود<a id="file_url" href="">اینجا </a>  را کلیک کنید</div>
+
 <div id="loader" style="display: none;"></div>
 <!-- <div class="loader cen" style="display: none;"> ...در حال اجرا</div> -->
 {% endblock content %}
 
 {% block javascript %}
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 <script>
-    function showLoader() {
-      document.getElementById("loader").style.display = "block";
+    $('#post-form').on('submit', function(event){
+        event.preventDefault();
+        console.log("form didnt submit and came here!");
+        let sd = $('#start_date').val();
+        let ed = $('#end_date').val();
+        let st = $('#start_time').val();
+        let et = $('#end_time').val();
+        let n = $('#name').val();
+        showLoader(true);
+        blurBackground(true);
+        getReport(n,sd,ed,st,et);
+    });
+
+    function showLoader(cond) {
+        if (cond === true){document.getElementById("loader").style.display = "block";}
+        else{document.getElementById("loader").style.display = "none";}
     }
-    function getReport(){
-        showLoader()
+
+    function blurBackground(cond){
         const myForm = document.querySelector('.bg-form');
-        myForm.style.cssText += 'filter: blur(4px);-webkit-filter: blur(4px);';
+        if (cond === true){
+            myForm.style.cssText += 'filter: blur(4px);-webkit-filter: blur(4px);';
+        }else{
+            myForm.style.cssText -= 'filter: blur(4px);-webkit-filter: blur(4px);';
+        }
+    }
+
+    function getReport(name,start_date,end_date,start_time,end_time){
         axios({
         method: 'post',
         url: 'http://localhost:8000/api/report/',
         data: {
-            firstName: 'Fred',
-            lastName: 'Flintstone'
+            "name": name,
+            "start_date": start_date,
+            "end_date": end_date,
+            "start_time": start_time,
+            "end_time": end_time,
         }
+        }).then(function(response){
+            console.log("getting response from back");
+            console.log(response);
+            console.log(response.data.file_url);
+            if (response.status === 200){
+                // unblur
+                showLoader(false);
+                blurBackground(false);
+                $("#file_url").attr("href", response.data.file_url);
+                // clear loader
+                // create link
+            }
+
+        }).catch(function(error){
+            console.log(error);
         });
-        // setTimeout(() => {  console.log("i waited!"); },3000);
     }
 </script>
 {% endblock javascript %}
