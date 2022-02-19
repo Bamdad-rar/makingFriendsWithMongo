@@ -1,16 +1,23 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from utils import get_db_handle, get_collection_handle
+from utils import db,coll
 import csv
 from utils import generate_csv_file_name
 from datetime import datetime
 from config import STORAGE_ABS_PATH
 
 
+db_handle = db
+coll_handle = coll
+
+
 @api_view(["POST"])
 def report(request):
+    # input validation
 
+
+    
     # convert input time to isoformat strings
     sy, sm, sd = [int(item) for item in request.data["start_date"].split("-")]
     ey, em, ed = [int(item) for item in request.data["end_date"].split("-")]
@@ -26,9 +33,7 @@ def report(request):
         year=ey, month=em, day=ed, hour=ehour, minute=emin
     ).isoformat()
 
-    # connecting to db and querying
-    db_handle, _ = get_db_handle()
-    coll_handle = get_collection_handle(db_handle)
+
     if name := request.data["name"]:
         print("query with name")
         targetQuery = coll_handle.find(
