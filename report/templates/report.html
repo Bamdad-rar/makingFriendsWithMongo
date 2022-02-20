@@ -83,14 +83,14 @@
         
         <div class="center" style="display: block;">
             <label for="start_date">تاریخ شروع:</label>
-            <input type="date" id="start_date" name="start_date" min="2000-01-01" max="2022-12-31" required>
+            <input type="date" id="start_date" name="start_date" min="2000-01-01" max="2022-12-31">
             <input type="time" id="start_time" name="start_time">
             <label for="start_time">: ساعت</label>
         </div>
 
         <div class="center" style="display: block;">
             <label for="end_date">تاریخ پایان:</label>
-            <input type="date" id="end_date" name="end_date" min="2000-01-01" max="2022-12-31" required>
+            <input type="date" id="end_date" name="end_date" min="2000-01-01" max="2022-12-31">
             <input type="time" id="end_time" name="end_time">
             <label for="end_time">: ساعت</label>
         </div>
@@ -158,8 +158,10 @@
                 showLoader(false);
                 blurBackground(false);
                 showFileLink(response.data.file_url);
+            }else if (response.status==400){
+                console.log("something horrible happened :(")
             }else{
-                alert("something horrible happened :(")
+                alert("well shit")
             }
 
         }).catch(function(error){
