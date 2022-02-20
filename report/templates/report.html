@@ -109,7 +109,6 @@
 <script>
     $('#post-form').on('submit', function(event){
         event.preventDefault();
-        console.log("form didnt submit and came here!");
         let sd = $('#start_date').val();
         let ed = $('#end_date').val();
         let st = $('#start_time').val();
@@ -151,21 +150,20 @@
             "end_time": end_time,
         }
         }).then(function(response){
-            console.log("getting response from back");
             console.log(response);
             console.log(response.data.file_url);
             if (response.status === 200){
                 showLoader(false);
                 blurBackground(false);
                 showFileLink(response.data.file_url);
-            }else if (response.status==400){
-                console.log("something horrible happened :(")
             }else{
-                alert("well shit")
+                console.log("something foreseeable happened but i dont wanna talk about it")
             }
-
-        }).catch(function(error){
-            console.log(error);
+        }).catch(function({error}){
+            showLoader(false);
+            blurBackground(false);
+            alert("inputs are incorrect")
+            console.log("inputs are incorrect")
         });
     }
 </script>

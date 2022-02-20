@@ -38,3 +38,9 @@ def report(request):
         {"file_url": "http://localhost:8000/report/download/" + filename},
         status=status.HTTP_200_OK,
     )
+
+
+@api_view(["GET","POST"])
+def echo(request):
+    return Response(request.data)
+
